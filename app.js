@@ -92,8 +92,8 @@ let output = [];
 
       if (answers.addAnother === true) {
         ask();
+
       } else { 
-        console.log("You have successfully created a team profile!");
         const rendered = render(output);
 
         fs.writeFile(outputPath, rendered, (err) => {
