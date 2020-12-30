@@ -73,16 +73,21 @@ let output = [];
   function ask() {
     inquirer.prompt(questions).then((answers) => {
       
-      if (answers.role === "Manager") {
+      switch (answers.role) {
+      case "Manager": 
         output.push(new Manager(answers.name, answers.id, answers.email, answers.officeNumber));
+        break;
         
-      } else if (answers.role === "Engineer") {
+      case "Engineer": 
         output.push(new Engineer(answers.name, answers.id, answers.email, answers.github));
+        break;
         
-
-      } else if (answers.role === "Intern") {
-        output.push(new Intern(answers.name, answers.id, answers.email, answers.school));
+      case "Intern": 
+          output.push(new Intern(answers.name, answers.id, answers.email, answers.school));
+          break;
         
+      default:
+        console.log("The role was not recognized");
       }
 
       if (answers.addAnother === true) {
