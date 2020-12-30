@@ -75,9 +75,7 @@ let output = [];
       
       if (answers.role === "Manager") {
         output.push(new Manager(answers.name, answers.id, answers.email, answers.officeNumber));
-        //console.log(employee);
-        console.log(output);
-
+        
       } else if (answers.role === "Engineer") {
         output.push(new Engineer(answers.name, answers.id, answers.email, answers.github));
         
@@ -91,13 +89,17 @@ let output = [];
         ask();
       } else { 
         console.log("You have successfully created a team profile!");
-        console.log(output);
-        render(output);
+        const rendered = render(output);
+
+        fs.writeFile(outputPath, rendered, (err) => {
+          if (err) return console.log(err);
+          console.log("File successfully created!");
+        })
       }
     })
   };
 
-  ask();
+  ask()
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
@@ -116,4 +118,4 @@ let output = [];
 // and Intern classes should all extend from a class named Employee; see the directions
 // for further information. Be sure to test out each class and verify it generates an
 // object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
+// for the provided `render` function to work! ``
