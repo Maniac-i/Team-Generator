@@ -16,12 +16,31 @@ const render = require("./lib/htmlRenderer");
 
 let output = [];
 
-   let questions =  [
-     {
+   let questions = [
+    {
+      type: 'confirm',
+      name: 'manager',
+      message: 'Would you like to add a Manager?',
+      default: true,
+      when: () => !output.some(output => output instanceof Manager),
+    },
+    {
       type: 'list',
       name: 'role',
       message: 'What is the role of this team member?',
-      choices: ['Manager', 'Engineer', 'Intern'],
+      choices: ['Manager'],
+      when: function (answers) {
+        return answers.manager == true;
+      }
+    },
+    {
+      type: 'list',
+      name: 'role',
+      message: 'What role would you like to add?',
+      choices: ['Engineer', 'Intern'],
+      when: function (answers) {
+        return answers.manager == false || !answers.manager;
+      }
     },
     {
       type: 'input',
@@ -71,11 +90,12 @@ let output = [];
   ];
   
   function ask() {
-    inquirer.prompt(questions).then((answers) => {
+    return inquirer.prompt(questions).then((answers) => {
       
       switch (answers.role) {
       case "Manager": 
         output.push(new Manager(answers.name, answers.id, answers.email, answers.officeNumber));
+       console.log(output);
         break;
         
       case "Engineer": 
@@ -91,9 +111,11 @@ let output = [];
       }
 
       if (answers.addAnother === true) {
-        ask();
+        
+        return ask();
 
       } else { 
+
         const rendered = render(output);
 
         fs.writeFile(outputPath, rendered, (err) => {
@@ -105,6 +127,8 @@ let output = [];
   };
 
   ask()
+
+  
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
